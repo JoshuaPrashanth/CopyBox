@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+  
+  //add code below this line
+  double seven = 7;
+  double two = 2;
+  cout << (seven / two);
+  //add code above this line
+  
+  return 0;
+}

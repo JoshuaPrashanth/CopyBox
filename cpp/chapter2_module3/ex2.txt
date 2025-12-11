@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main(int argc, char** argv) {
+  
+  string my_string = (argv[1]);
+  
+  //add code below this line
+  string repeated_string = "";
+  for (int i = 0; i < my_string.length(); i++) {
+      repeated_string += my_string;
+  }
+
+  for (int i = 0; i < my_string.length(); i++) {
+      cout << repeated_string << endl;
+  }
+  //add code above this line
+  
+  return 0;
+}

@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+//add function definitions below this line
+int GetMax(vector<int> nums) {
+    // Base case: if the vector has only one element, return it
+    if (nums.size() == 1) {
+        return nums[0];
+    }
+    
+    // Recursive case: find the max of the rest of the vector
+    vector<int> rest(nums.begin() + 1, nums.end());
+    return max(nums[0], GetMax(rest));
+}
+//add function definitions above this line
+
+int main(int argc, char** argv) {
+    vector<int> nums;
+    for (int i = 1; i < argc; i++) {
+        nums.push_back(stoi(argv[i]));
+    }
+    cout << GetMax(nums) << endl;
+    return 0;
+}

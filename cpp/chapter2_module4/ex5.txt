@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
+#include <iomanip>
+using namespace std;
+
+int main(int argc, char** argv) {
+
+////////// DO NOT EDIT! //////////
+  string path = argv[1];        //
+//////////////////////////////////  
+
+//add code below this line
+
+ifstream file(path);  // open the CSV file
+if (!file.is_open()) {
+    cerr << "Could not open the file." << endl;
+    return 1;
+}
+
+string line;
+vector<string> southernCities;
+
+// Skip the header line
+getline(file, line);
+
+while (getline(file, line)) {
+    stringstream ss(line);
+    string city, country, latStr, lonStr;
+
+    // Read each field separated by commas
+    getline(ss, city, ',');
+    getline(ss, country, ',');
+    getline(ss, latStr, ',');
+    getline(ss, lonStr, ',');
+
+    double latitude = stod(latStr); // convert latitude to number
+
+    if (latitude < 0) {
+        southernCities.push_back(city);
+    }
+}
+
+file.close();
+
+// Print the result
+cout << "The following cities are in the Southern Hemisphere: ";
+for (size_t i = 0; i < southernCities.size(); i++) {
+    cout << southernCities[i];
+    if (i != southernCities.size() - 1) {
+        cout << ", ";
+    } else {
+        cout << ".";
+    }
+}
+cout << endl;
+
+//add code above this line
+
+  return 0;
+}

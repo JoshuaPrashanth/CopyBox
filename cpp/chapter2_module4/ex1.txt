@@ -1,0 +1,33 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+int main(int argc, char** argv) {
+
+    ////////// DO NOT EDIT! //////////
+    string path = argv[1];        //
+    //////////////////////////////////  
+
+    ifstream file(path);
+    if (!file.is_open()) {
+        cerr << "Could not open the file." << endl;
+        return 1;
+    }
+
+    string line;
+    int lineCount = 0;
+    int charCount = 0;
+
+    while (getline(file, line)) {
+        lineCount++;
+        charCount += line.length(); // count characters in the line
+    }
+
+    file.close();
+
+    cout << lineCount << " line(s)" << endl;
+    cout << charCount << " character(s)" << endl;
+
+    return 0;
+}

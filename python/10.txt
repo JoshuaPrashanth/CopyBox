@@ -1,0 +1,73 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_style("whitegrid")
+
+df = pd.read_csv("Placement_data_full_class.csv")
+
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.hist(df['ssc_p'], bins=10, color='skyblue', edgecolor='black')
+plt.title('Histogram of Secondary School Percentage (ssc_p)')
+plt.xlabel('SSC Percentage')
+plt.ylabel('Frequency')
+
+plt.subplot(1, 2, 2)
+hsc_s_counts = df['hsc_s'].value_counts()
+sns.barplot(x=hsc_s_counts.index, y=hsc_s_counts.values, palette='viridis')
+plt.title('Bar Chart of Higher Secondary Specialization (hsc_s)')
+plt.xlabel('HSC Specialization')
+plt.ylabel('Count')
+
+plt.tight_layout()
+plt.show()
+
+facet_plot = sns.relplot(
+    data=df,
+    x='degree_p',
+    y='mba_p',
+    col='status',
+    hue='status',
+    kind='scatter',
+    height=4,
+    aspect=1.2
+)
+facet_plot.fig.suptitle('Facet Plot (degree_p vs mba_p) by Placement Status', y=1.02)
+facet_plot.tight_layout()
+plt.show()
+
+pair_plot_cols = ['ssc_p', 'hsc_p', 'degree_p', 'mba_p']
+pair_plot = sns.pairplot(df[pair_plot_cols])
+pair_plot.fig.suptitle('Pair Plot of Key Academic Percentages', y=1.02)
+plt.show()
+
+workex_counts = df['workex'].value_counts()
+labels = workex_counts.index
+sizes = workex_counts.values
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+ax1.pie(
+    sizes,
+    labels=labels,
+    autopct='%1.1f%%',
+    startangle=90,
+    colors=['lightgreen', 'lightcoral']
+)
+ax1.set_title('Pie Chart of Work Experience (workex) Proportions')
+ax1.axis('equal')
+
+ax2.bar(
+    labels,
+    sizes,
+    color=['mediumseagreen', 'salmon']
+)
+ax2.set_title('Magnitude of Work Experience (workex) Counts')
+ax2.set_xlabel('Work Experience (Yes / No)')
+ax2.set_ylabel('Count')
+
+for i, count in enumerate(sizes):
+    ax2.text(i, count + 1, str(count), ha='center', va='bottom', fontsize=10)
+
+plt.tight_layout()
+plt.show()

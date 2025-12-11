@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main(int argc, char** argv) {
+    int x = stoi(argv[1]);
+
+    // Check if x is between 0-25 or 75-100
+    if ((x >= 0 && x <= 25) || (x >= 75 && x <= 100)) {
+        cout << x << " is between 0 and 25 or 75 and 100";
+    }
+
+    return 0;
+}

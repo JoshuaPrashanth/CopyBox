@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo/CopyBox_logo.png">
+    <title>CopyBox - Secure Code Repository</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --secondary: #10B981;
+            --dark-bg: #111827;
+            --light-bg: #F9FAFB;
+            --card-dark: #1F2937;
+            --card-light: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: #374151;
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: #E5E7EB;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E5E7EB;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #374151;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--card-light);
+            border: 2px solid #E5E7EB;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        body.dark-mode .theme-toggle {
+            background: var(--card-dark);
+            border-color: #374151;
+            color: white;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Login */
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: var(--card-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        body.dark-mode .login-container {
+            background: var(--card-dark);
+        }
+
+        .login-container h2 {
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        body.dark-mode .input-group input {
+            background: #374151;
+            border-color: #4B5563;
+            color: white;
+        }
+
+        .error {
+            background: #FEE2E2;
+            color: #DC2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        body.dark-mode .error {
+            background: #422;
+            color: #FCA5A5;
+        }
+
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+        }
+
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .folder-card {
+            background: var(--card-light);
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .folder-card {
+            background: var(--card-dark);
+        }
+
+        .folder-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .folder-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* Files Page */
+        .files-page {
+            display: none;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .files-list {
+            background: var(--card-light);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        body.dark-mode .files-list {
+            background: var(--card-dark);
+        }
+
+        .file-item {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .file-item {
+            border-bottom-color: #374151;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .copy-btn.copied {
+            background: var(--secondary);
+        }
+
+        /* Chapter-Module Selection */
+        .chapter-module-selection {
+            background: var(--card-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        body.dark-mode .chapter-module-selection {
+            background: var(--card-dark);
+        }
+
+        .selection-inputs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .number-input {
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100px;
+            text-align: center;
+        }
+
+        body.dark-mode .number-input {
+            background: #374151;
+            border-color: #4B5563;
+            color: white;
+        }
+
+        .select-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .current-folder {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 10px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .folders-grid {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .selection-inputs {
+                flex-direction: column;
+                align-items: center;
+            }
+            .number-input {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Page -->
+        <div id="loginPage" class="login-container">
+            <div class="logo">
+                <img src="/logo/CopyBox_logo.png" alt="CopyBox Logo" style="height: 50px; width: auto; margin: 0;">
+                <h1>CopyBox</h1>
+            </div>
+            <h2>Student Login</h2>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="studentName" placeholder="Enter your full name">
+            </div>
+            <div class="input-group">
+                <label>USN</label>
+                <input type="text" id="studentUSN" placeholder="Enter your USN" style="text-transform: uppercase;">
+            </div>
+            <button class="btn" id="loginBtn">Login</button>
+            <div class="error" id="errorMsg">Invalid credentials</div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <header>
+                <div class="logo">
+                    <img src="/logo/CopyBox_logo.png" alt="CopyBox Logo" style="height: 50px; width: auto; margin: 0;">
+                    <!-- <i class="fas fa-copy"></i> -->
+                    <h1>CopyBox</h1>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeBtn">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </button>
+                    <button class="btn" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <div class="welcome">
+                <h2>Welcome, <span id="userName">Student</span>!</h2>
+                <p>Select a course to access code files</p>
+            </div>
+
+            <div class="folders-grid">
+                <div class="folder-card" data-course="python">
+                    <div class="folder-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3>Data Visualization With Python</h3>
+                    <p>Click to view files</p>
+                </div>
+                
+                <div class="folder-card" data-course="cpp">
+                    <div class="folder-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Programming in C++: A Hands-on Introduction</h3>
+                    <p>Click to view files</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Page -->
+        <div id="filesPage" class="files-page">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 id="courseTitle">Course Files</h2>
+            
+            <!-- Chapter-Module Selection (only for C++) -->
+            <div id="chapterModuleSelection" class="chapter-module-selection" style="display: none;">
+                <h3>Select Course and Module</h3>
+                <div class="selection-inputs">
+                    <input type="number" id="chapterNumber" class="number-input" placeholder="Course" min="1" max="4">
+                    <input type="number" id="moduleNumber" class="number-input" placeholder="Module" min="1" max="4">
+                    <button class="select-btn" id="loadFilesBtn">
+                        <i class="fas fa-folder-open"></i> Load Files
+                    </button>
+                </div>
+                <div id="currentFolder" class="current-folder" style="display: none;">
+                    Current: <span id="folderName"></span>
+                </div>
+            </div>
+            
+            <div class="files-list" id="filesList"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==============================================
+        // CONFIGURATION
+        // ==============================================
+        
+        // 1. Your course titles
+        const courseTitles = {
+            python: "Data Visualization With Python",
+            cpp: "Programming in C++: A Hands-on Introduction"
+        };
+        
+        // 2. Your Python files
+        const pythonFiles = [
+            { 
+                name: "8.txt", 
+                displayName: "VTU-8", 
+                path: "python/8.txt"
+            },
+            { 
+                name: "10.txt", 
+                displayName: "VTU-10", 
+                path: "python/10.txt"
+            }
+        ];
+        
+        // 3. C++ Chapter-Module structure - AUTO-GENERATED
+        const cppChapterModules = {};
+        
+        // Generate for chapters 1-4, modules 1-4
+        for (let chapter = 1; chapter <= 4; chapter++) {
+            for (let module = 1; module <= 4; module++) {
+                const folderName = `chapter${chapter}_module${module}`;
+                const files = [];
+                
+                // Special case: chapter2_module2 has only 2 files
+                const fileCount = (chapter === 2 && module === 2) ? 2 : 5;
+                
+                // Generate ex1.txt to exN.txt
+                for (let i = 1; i <= fileCount; i++) {
+                    files.push({
+                        name: `ex${i}.txt`,
+                        displayName: `Exercise ${i}`
+                    });
+                }
+                
+                cppChapterModules[folderName] = files;
+            }
+        }
+        
+        // ==============================================
+        // MAIN CODE
+        // ==============================================
+        
+        // Security
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+                alert('Developer tools are disabled for security.');
+            }
+        });
+        
+        // Theme toggle
+        document.getElementById('themeBtn').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            icon.className = document.body.classList.contains('dark-mode') ? 
+                'fas fa-sun' : 'fas fa-moon';
+            this.innerHTML = document.body.classList.contains('dark-mode') ? 
+                '<i class="fas fa-sun"></i> Light Mode' : 
+                '<i class="fas fa-moon"></i> Dark Mode';
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeBtn').innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        }
+        
+        // Load students from CSV
+        async function loadStudents() {
+            try {
+                const response = await fetch('students.csv');
+                const csv = await response.text();
+                const students = [];
+                
+                csv.split('\n').forEach(row => {
+                    const [usn, name, section] = row.split(',').map(c => c.trim());
+                    if (usn && name && usn !== 'USN') {
+                        students.push({
+                            name: name.split(' ').map(w => 
+                                w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+                            ).join(' '),
+                            usn: usn.toUpperCase()
+                        });
+                    }
+                });
+                return students;
+            } catch {
+                return [
+                    { name: "Adarsh M", usn: "4MH24CS003" },
+                    { name: "Rahul Sharma", usn: "4MH24CS004" }
+                ];
+            }
+        }
+        
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', async function() {
+            const name = document.getElementById('studentName').value.trim();
+            const usn = document.getElementById('studentUSN').value.trim().toUpperCase();
+            
+            const students = await loadStudents();
+            const student = students.find(s => 
+                s.usn === usn && s.name.toLowerCase() === name.toLowerCase()
+            );
+            
+            if (student) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('userName').textContent = student.name;
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        });
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentUSN').value = '';
+        });
+        
+        // Store current course type
+        let currentCourse = '';
+        let currentCppFolder = '';
+        
+        // Open course
+        document.querySelectorAll('.folder-card').forEach(card => {
+            card.addEventListener('click', function() {
+                currentCourse = this.dataset.course;
+                document.getElementById('courseTitle').textContent = courseTitles[currentCourse];
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('filesPage').style.display = 'block';
+                
+                // Show/hide chapter-module selection based on course
+                const selectionDiv = document.getElementById('chapterModuleSelection');
+                if (currentCourse === 'cpp') {
+                    selectionDiv.style.display = 'block';
+                    document.getElementById('filesList').innerHTML = `
+                        <div class="file-item">
+                            <div>
+                                <strong>Select Course (1-4) and Module (1-4) above</strong><br>
+                                <small>Most folders have 5 exercises, except course2_module2 has 2 exercises</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    selectionDiv.style.display = 'none';
+                    loadPythonFiles();
+                }
+            });
+        });
+        
+        // Load Python files
+        function loadPythonFiles() {
+            const filesList = document.getElementById('filesList');
+            filesList.innerHTML = '';
+            
+            if (pythonFiles.length === 0) {
+                filesList.innerHTML = '<div class="file-item">No Python files available</div>';
+            } else {
+                pythonFiles.forEach((file, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.innerHTML = `
+                        <div>
+                            <strong>${file.displayName}</strong><br>
+                            
+                        </div>
+                        <button class="copy-btn" onclick="copyActualCode('${file.path}', this)">
+                            Copy Code
+                        </button>
+                    `;
+                    filesList.appendChild(div);
+                });
+            }
+        }
+        
+        // Load C++ files based on chapter-module selection
+        document.getElementById('loadFilesBtn').addEventListener('click', function() {
+            const chapter = document.getElementById('chapterNumber').value;
+            const module = document.getElementById('moduleNumber').value;
+            
+            if (!chapter || !module) {
+                alert('Please enter both Course and module numbers');
+                return;
+            }
+            
+            if (chapter < 1 || chapter > 4 || module < 1 || module > 4) {
+                alert('Please enter valid numbers (Course: 1-4, Module: 1-4)');
+                return;
+            }
+            
+            const folderName = `chapter${chapter}_module${module}`;
+            currentCppFolder = folderName;
+            
+            // Update UI
+            document.getElementById('folderName').textContent = `Chapter ${chapter}, Module ${module}`;
+            document.getElementById('currentFolder').style.display = 'block';
+            
+            // Load files for this chapter-module
+            loadCppFiles(folderName, chapter, module);
+        });
+        
+        // Load C++ files for specific chapter-module
+        function loadCppFiles(folderName, chapter, module) {
+            const filesList = document.getElementById('filesList');
+            filesList.innerHTML = '';
+            
+            // Get files for this folder
+            const files = cppChapterModules[folderName] || [];
+            
+            if (files.length === 0) {
+                filesList.innerHTML = `
+                    <div class="file-item">
+                        <div>
+                            <strong>No files found in Course ${chapter}, Module ${module}</strong><br>
+                            <small>Check if the folder exists: ${folderName}</small>
+                        </div>
+                    </div>
+                `;
+            } else {
+                files.forEach((file, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    // Path format: cpp/chapterX_moduleY/exN.txt
+                    const filePath = `cpp/${folderName}/${file.name}`;
+                    div.innerHTML = `
+                        <div>
+                            <strong>${file.displayName}</strong><br>
+                            
+                        </div>
+                        <button class="copy-btn" onclick="copyActualCode('${filePath}', this)">
+                            Copy Code
+                        </button>
+                    `;
+                    filesList.appendChild(div);
+                });
+            }
+        }
+        
+        // Copy ACTUAL code from file
+        async function copyActualCode(filePath, button) {
+            try {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                button.disabled = true;
+                
+                const response = await fetch(filePath);
+                
+                if (!response.ok) {
+                    throw new Error(`File not found: ${filePath}`);
+                }
+                
+                const actualCode = await response.text();
+                await navigator.clipboard.writeText(actualCode);
+                
+                button.disabled = false;
+                button.classList.add('copied');
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                
+                showNotification(`Copied`, 'success');
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = 'Copy Code';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error copying file:', error);
+                button.disabled = false;
+                button.innerHTML = 'Copy Code';
+                showNotification(`Error: File not found at ${filePath}`, 'error');
+            }
+        }
+        
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${message}
+            `;
+            
+            if (!document.querySelector('#notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    .notification {
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        padding: 15px 20px;
+                        border-radius: 10px;
+                        color: white;
+                        font-weight: 600;
+                        z-index: 1000;
+                        animation: slideIn 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        max-width: 400px;
+                    }
+                    .notification.success {
+                        background: linear-gradient(135deg, #10B981, #059669);
+                    }
+                    .notification.error {
+                        background: linear-gradient(135deg, #EF4444, #DC2626);
+                    }
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', function() {
+            document.getElementById('filesPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            // Reset inputs
+            document.getElementById('chapterNumber').value = '';
+            document.getElementById('moduleNumber').value = '';
+            document.getElementById('currentFolder').style.display = 'none';
+        });
+        
+        // Enter key for chapter/module inputs
+        document.getElementById('moduleNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loadFilesBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>

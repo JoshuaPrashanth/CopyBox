@@ -1,0 +1,16 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+  
+  //fix the code below this line
+
+  int a = 2;
+  int b = 15;
+
+  //fix the code above this line
+  
+  cout << (a * 3 + b - 8 / 2) << endl;
+  
+  return 0;
+}

@@ -1,0 +1,45 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int main(int argc, char** argv) {
+
+////////// DO NOT EDIT! //////////
+  string path = argv[1];        //
+//////////////////////////////////  
+
+  ifstream file(path);
+  if (!file.is_open()) {
+      cerr << "Could not open file.\n";
+      return 1;
+  }
+
+  string line;
+  string oldest_name;
+  int oldest_age = -1;
+
+  while (getline(file, line)) {
+      stringstream ss(line);
+      string name, age_str, profession;
+
+      // Read tab-delimited fields
+      getline(ss, name, '\t');
+      getline(ss, age_str, '\t');
+      getline(ss, profession, '\t');
+
+      int age = stoi(age_str);
+
+      if (age > oldest_age) {
+          oldest_age = age;
+          oldest_name = name;
+      }
+  }
+
+  file.close();
+
+  cout << "The oldest person is " << oldest_name << "." << endl;
+
+  return 0;
+}

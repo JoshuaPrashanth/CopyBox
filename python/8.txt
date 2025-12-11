@@ -1,0 +1,101 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def model_predictor(filepath):
+    YEARS = [str(y) for y in range(1980, 2014)]
+    YEARS_90_13 = [str(y) for y in range(1990, 2014)]
+
+    df = pd.read_csv(filepath)
+    df.columns = df.columns.str.strip()
+
+    rename_map = {
+        'OdName': 'Country',
+        'AreaName': 'Continent',
+        'RegName': 'Region',
+        'DevName': 'Development'
+    }
+    df.rename(columns=rename_map, inplace=True)
+
+    drop_cols = ['AREA', 'REG', 'DEV', 'Type', 'Coverage']
+    df.drop(columns=drop_cols, errors='ignore', inplace=True)
+
+    for y in YEARS:
+        if y not in df.columns:
+            df[y] = 0
+
+    df['Total'] = df[YEARS].sum(axis=1)
+    df.set_index('Country', inplace=True)
+
+    plt.style.use('ggplot')
+
+    top6 = df.sort_values(by='Total', ascending=False).head(6)
+    df_area = top6[YEARS_90_13].transpose()
+    df_area.index = df_area.index.astype(int)
+
+    df_area.plot(kind='area', figsize=(12, 7), alpha=0.7)
+    plt.title("Top 6 Immigrant Countries to Canada (1990–2013)")
+    plt.xlabel("Year")
+    plt.ylabel("Immigrants")
+    plt.tight_layout()
+    plt.show()
+
+    if "India" in df.index:
+        india = df.loc["India", YEARS]
+        india.index = india.index.astype(int)
+        plt.figure(figsize=(14, 6))
+        sns.barplot(x=india.index, y=india.values)
+        plt.title("Immigration from India to Canada (1980–2013)")
+        plt.xlabel("Year")
+        plt.ylabel("Immigrants")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
+    countries_box = ["India", "Philippines", "China"]
+    available = [c for c in countries_box if c in df.index]
+
+    if available:
+        df_box = df.loc[available, YEARS].transpose()
+        plt.figure(figsize=(10, 7))
+        sns.boxplot(data=df_box)
+        plt.title("Immigration Distribution (1980–2013)")
+        plt.xlabel("Country")
+        plt.ylabel("Immigrants per Year")
+        plt.tight_layout()
+        plt.show()
+
+    if all(c in df.index for c in ["India", "France"]):
+        df_comp = df.loc[["India", "France"], YEARS].transpose()
+        df_comp.index = df_comp.index.astype(int)
+        df_comp.plot(kind='area', stacked=False, figsize=(12, 7), alpha=0.6)
+        plt.title("Annual Immigration: India vs France (1980–2013)")
+        plt.xlabel("Year")
+        plt.ylabel("Immigrants")
+        plt.tight_layout()
+        plt.show()
+
+        totals = df.loc[["India", "France"], "Total"]
+        plt.figure(figsize=(8, 8))
+        totals.plot(
+            kind='pie',
+            autopct='%1.1f%%',
+            startangle=90,
+            shadow=True,
+            explode=[0.05, 0]
+        )
+        plt.title("Total Immigration Share: India vs France (1980–2013)")
+        plt.ylabel("")
+        plt.show()
+
+    if all(c in df.index for c in ["Fiji", "Singapore"]):
+        fiji = df.loc["Fiji", YEARS].values
+        singapore = df.loc["Singapore", YEARS].values
+        plt.figure(figsize=(8, 8))
+        plt.hexbin(fiji, singapore, gridsize=20, cmap="plasma")
+        plt.colorbar(label="Frequency")
+        plt.title("Hexbin Plot: Fiji vs Singapore (1980–2013)")
+        plt.xlabel("Fiji Immigrants")
+        plt.ylabel("Singapore Immigrants")
+        plt.tight_layout()
+        plt.show()

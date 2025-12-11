@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+//add class definitions below this line
+class Fruit {
+private:
+    string name;
+    string color;
+
+public:
+    // Constructor
+    Fruit(string n, string c) {
+        name = n;
+        color = c;
+    }
+
+    // Getter for name
+    string GetName() {
+        return name;
+    }
+
+    // Getter for color
+    string GetColor() {
+        return color;
+    }
+
+    // Setter for name
+    void SetName(string n) {
+        name = n;
+    }
+
+    // Setter for color
+    void SetColor(string c) {
+        color = c;
+    }
+};
+//add class definitions above this line
+
+int main() {
+  
+  //DO NOT EDIT CODE BELOW THIS LINE
+
+  Fruit fruit("apple", "red");
+  cout << fruit.GetName() << endl;
+  cout << fruit.GetColor() << endl;
+  fruit.SetName("orange");
+  fruit.SetColor("orange");
+  cout << fruit.GetName() << endl;
+  cout << fruit.GetColor() << endl;
+
+  //DO NOT EDIT CODE ABOVE THIS LINE
+  
+  return 0;
+}

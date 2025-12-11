@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+//add class definitions below this line
+
+class Subway {
+  public:
+    Subway() {
+      passengers = 0;
+      total_fares = 0;
+    }
+
+    // Returns the current number of passengers
+    int GetPassengers() {
+      return passengers;
+    }
+
+    // Boards a number of passengers (positive only)
+    void Board(int p) {
+      if (p >= 0) {
+        passengers += p;
+        CalculateFares(p);
+      }
+    }
+
+    // Disembarks a number of passengers (cannot go below 0)
+    void Disembark(int p) {
+      if (p >= 0) {
+        if (p > passengers) {
+          passengers = 0;
+        } else {
+          passengers -= p;
+        }
+      }
+    }
+
+    // Returns the total fares collected
+    double GetFares() {
+      return total_fares;
+    }
+
+  private:
+    const double fare = 2.40; // variable cannot be reassigned
+    int passengers;
+    double total_fares;
+
+    // Helper function to calculate fares for newly boarded passengers
+    void CalculateFares(int new_passengers) {
+      total_fares += new_passengers * fare;
+    }
+};
+
+//add class definitions above this line   
+
+int main() {
+  
+  //DO NOT EDIT code below this line
+
+  Subway s;
+  cout << s.GetPassengers() << endl;
+  s.Board(23);
+  s.Disembark(12);
+  cout << s.GetPassengers() << endl;
+  cout << s.GetFares() << endl;
+
+  //DO NOT EDIT code above this line
+  
+  return 0;
+}
