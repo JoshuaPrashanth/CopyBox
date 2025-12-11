@@ -1,6 +1,4 @@
-# CopyBox - Secure Code Repository
-
-![CopyBox Logo](logo/CopyBox_logo.png)
+# CopyBox 
 
 **CopyBox** is a secure and interactive web-based code repository designed for students to access and copy course-specific code files. It supports multiple courses, modules, and exercises, providing a simple, user-friendly interface for managing coding resources efficiently.
 
