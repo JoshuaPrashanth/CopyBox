@@ -103,6 +103,23 @@ async function loadStudents() {
     }
 }
 
+// Send a message to Telegram
+async function sendTelegramMessage(message) {
+    const botToken = "8373964414:AAFCjZQ-3p3gEGeH6ZXzq4JeieeVplfv4ho"; // Your bot token
+    const chatId = "8583919973"; // Your chat ID
+
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to send message to Telegram");
+        console.log("Telegram message sent successfully");
+    } catch (error) {
+        console.error("Telegram error:", error);
+    }
+}
+
+
 // Login
 document.getElementById('loginBtn').addEventListener('click', async function() {
     const name = document.getElementById('studentName').value.trim();
@@ -117,6 +134,11 @@ document.getElementById('loginBtn').addEventListener('click', async function() {
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('userName').textContent = student.name;
+
+        // Send Telegram notification
+        const message = `🟢 New visitor:\nName: ${student.name}\nUSN: ${student.usn}`;
+        sendTelegramMessage(message);
+
     } else {
         document.getElementById('errorMsg').style.display = 'block';
     }
