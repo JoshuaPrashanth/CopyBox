@@ -1,0 +1,47 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+
+df_2019 = pd.read_csv("flights_2019.csv")
+df_2020 = pd.read_csv("flights_2020.csv")
+
+df_2019["YEAR"] = 2019
+df_2020["YEAR"] = 2020
+
+combined = pd.concat([df_2019, df_2020])
+
+plt.figure()
+plt.boxplot([df_2019["DISTANCE"], df_2020["DISTANCE"]], labels=["2019", "2020"])
+plt.title("Distance Statistics Comparison (January)")
+plt.xlabel("Year")
+plt.ylabel("Distance")
+plt.show()
+
+fig1 = px.histogram(combined, x="DISTANCE", color="YEAR", barmode="overlay",
+                    title="Distance Distribution Comparison (2019 vs 2020)")
+fig1.show()
+
+airports = [11778, 11267]
+
+count_2019 = df_2019[df_2019["DEST_AIRPORT_ID"].isin(airports)]["DEST_AIRPORT_ID"].value_counts()
+count_2020 = df_2020[df_2020["DEST_AIRPORT_ID"].isin(airports)]["DEST_AIRPORT_ID"].value_counts()
+
+counts = pd.DataFrame({"2019": count_2019, "2020": count_2020}).fillna(0)
+
+counts.plot(kind="bar")
+plt.title("Number of Flights to Selected Airports")
+plt.xlabel("Destination Airport ID")
+plt.ylabel("Number of Flights")
+plt.show()
+
+counts_reset = counts.reset_index().rename(columns={"index": "Airport"})
+
+fig2 = px.bar(counts_reset, x="Airport", y=["2019", "2020"], barmode="group",
+              title="Flights Count Comparison by Destination Airport")
+fig2.show()
+
+combined["Count"] = 1
+
+fig3 = px.sunburst(combined, path=["YEAR", "DEST_AIRPORT_ID"], values="Count",
+                   title="Sunburst Plot of Flights by Year and Destination Airport")
+fig3.show()

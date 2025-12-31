@@ -16,6 +16,11 @@ const pythonFiles = [
         path: "python/8.txt"
     },
     { 
+        name: "9.txt", 
+        displayName: "VTU-9", 
+        path: "python/9.txt"
+    },
+    { 
         name: "10.txt", 
         displayName: "VTU-10", 
         path: "python/10.txt"
